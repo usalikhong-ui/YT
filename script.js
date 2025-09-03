@@ -196,98 +196,98 @@ const DATABASE = {
         L032: [{ itemId: 'staffOfWisdom', chance: 0.05, quantity: [1,1], class: ['monk']}, { itemId: 'skillBookEnlightenment', chance: 0.01, quantity: [1,1]}, { itemId: 'gold', chance: 1, quantity: [10000, 20000], isMoney: true}],
     },
     skills: {
-        // [修正] 為所有傷害技能補充 damageMultiplier (Sec 1.3)
+        // [修正] 優化技能說明
         // --- 劍客 (10) ---
         slash: { name: '斬擊', class:'swordsman', type: 'physical', targetType: 'single', maxLevel: 5, levelReq: 1, levels: [
-            { mpCost: 5, damageMultiplier: 1.5, description: '對單一敵人造成<span class="text-yellow-400">150%</span>攻擊力的物理傷害。' },
-            { mpCost: 6, damageMultiplier: 1.7, description: '對單一敵人造成<span class="text-yellow-400">170%</span>攻擊力的物理傷害。' },
-            { mpCost: 7, damageMultiplier: 1.9, description: '對單一敵人造成<span class="text-yellow-400">190%</span>攻擊力的物理傷害。' },
-            { mpCost: 8, damageMultiplier: 2.1, description: '對單一敵人造成<span class="text-yellow-400">210%</span>攻擊力的物理傷害。' },
-            { mpCost: 9, damageMultiplier: 2.3, description: '對單一敵人造成<span class="text-yellow-400">230%</span>攻擊力的物理傷害。' },
+            { mpCost: 5, damageMultiplier: 1.5, description: '[單體] 對單一敵人造成<span class="text-yellow-400">150%</span>攻擊力的物理傷害。' },
+            { mpCost: 6, damageMultiplier: 1.7, description: '[單體] 對單一敵人造成<span class="text-yellow-400">170%</span>攻擊力的物理傷害。' },
+            { mpCost: 7, damageMultiplier: 1.9, description: '[單體] 對單一敵人造成<span class="text-yellow-400">190%</span>攻擊力的物理傷害。' },
+            { mpCost: 8, damageMultiplier: 2.1, description: '[單體] 對單一敵人造成<span class="text-yellow-400">210%</span>攻擊力的物理傷害。' },
+            { mpCost: 9, damageMultiplier: 2.3, description: '[單體] 對單一敵人造成<span class="text-yellow-400">230%</span>攻擊力的物理傷害。' },
         ]},
         whirlwind: { name: '旋風斬', class:'swordsman', type: 'physical', targetType: 'all', maxLevel: 3, levelReq: 3, prerequisite: { skillId: 'slash', level: 2 }, levels: [
-            { mpCost: 15, damageMultiplier: 1.1, description: '揮舞武器，對所有敵人造成<span class="text-yellow-400">110%</span>攻擊力的物理傷害。' },
-            { mpCost: 17, damageMultiplier: 1.2, description: '更強力的旋風斬，對所有敵人造成<span class="text-yellow-400">120%</span>攻擊力的物理傷害。' },
-            { mpCost: 19, damageMultiplier: 1.3, description: '毀滅性的旋風斬，對所有敵人造成<span class="text-yellow-400">130%</span>攻擊力的物理傷害。' },
+            { mpCost: 15, damageMultiplier: 1.1, description: '[範圍] 揮舞武器，對所有敵人造成<span class="text-yellow-400">110%</span>攻擊力的物理傷害。' },
+            { mpCost: 17, damageMultiplier: 1.2, description: '[範圍] 更強力的旋風斬，對所有敵人造成<span class="text-yellow-400">120%</span>攻擊力的物理傷害。' },
+            { mpCost: 19, damageMultiplier: 1.3, description: '[範圍] 毀滅性的旋風斬，對所有敵人造成<span class="text-yellow-400">130%</span>攻擊力的物理傷害。' },
         ]},
         powerStrike: { name: '強力打擊', class:'swordsman', type: 'physical', targetType: 'single', maxLevel: 2, levelReq: 5, prerequisite: { skillId: 'slash', level: 3 }, levels: [
-            { mpCost: 10, damageMultiplier: 2.2, description: '蓄力一擊，造成<span class="text-yellow-400">220%</span>攻擊力的巨大傷害。' },
-            { mpCost: 12, damageMultiplier: 2.5, description: '全力蓄力，造成<span class="text-yellow-400">250%</span>攻擊力的毀滅性傷害。' },
+            { mpCost: 10, damageMultiplier: 2.2, description: '[單體] 蓄力一擊，造成<span class="text-yellow-400">220%</span>攻擊力的巨大傷害。' },
+            { mpCost: 12, damageMultiplier: 2.5, description: '[單體] 全力蓄力，造成<span class="text-yellow-400">250%</span>攻擊力的毀滅性傷害。' },
         ]},
         shieldBash: { name: '盾牌猛擊', class:'swordsman', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 8, prerequisite: { skillId: 'whirlwind', level: 2 }, levels: [
-            { mpCost: 12, damageMultiplier: 1.2, description: '用盾牌猛擊敵人，造成<span class="text-yellow-400">120%</span>攻擊力的物理傷害，並有機率使其<span class="text-orange-400">昏迷</span>。' },
+            { mpCost: 12, damageMultiplier: 1.2, description: '[單體] 用盾牌猛擊敵人，造成<span class="text-yellow-400">120%</span>攻擊力的物理傷害，並有機率使其<span class="text-orange-400">昏迷</span>。' },
         ]},
         charge: { name: '衝鋒', class:'swordsman', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 12, prerequisite: { skillId: 'powerStrike', level: 2 }, levels: [
-            { mpCost: 15, damageMultiplier: 1.8, description: '向目標衝鋒，造成<span class="text-yellow-400">180%</span>攻擊力的物理傷害，並<span class="text-orange-400">延後其行動</span>。' },
+            { mpCost: 15, damageMultiplier: 1.8, description: '[單體] 向目標衝鋒，造成<span class="text-yellow-400">180%</span>攻擊力的物理傷害，並<span class="text-orange-400">延後其行動</span>。' },
         ]},
-        defensiveStance: { name: '防禦姿態', class:'swordsman', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 6, levels: [{ mpCost: 10, effect: { id: 'defensiveStance', name: '防禦姿態', stat: 'def', value: 20, turns: 3}, description: '進入防禦姿態，提升<span class="text-green-400">20</span>點防禦力，持續3回合。'}] },
-        battleCry: { name: '戰吼', class:'swordsman', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 10, levels: [{ mpCost: 18, effect: { id: 'battleCry', name: '戰吼', stat: 'atk', value: 15, turns: 3}, description: '發出怒吼，提升<span class="text-green-400">15</span>點攻擊力，持續3回合。'}] },
-        ironWill: { name: '鋼鐵意志', class:'swordsman', type: 'passive', levelReq: 15, levels: [{ description: '被動：生命值低於<span class="text-red-400">30%</span>時，防禦力大幅提升。'}] },
-        lastStand: { name: '背水一戰', class:'swordsman', type: 'utility', targetType: 'self', maxLevel: 1, levelReq: 20, prerequisite: { skillId: 'ironWill', level: 1 }, levels: [{ mpCost: 30, description: '消耗大量法力，下一次攻擊必定<span class="text-red-500">暴擊</span>。'}] },
-        bladeStorm: { name: '劍刃風暴', class:'swordsman', type: 'physical', targetType: 'all', maxLevel: 1, levelReq: 25, prerequisite: { skillId: 'whirlwind', level: 3 }, levels: [{ mpCost: 50, damageMultiplier: 2.0, description: '化身為劍刃的風暴，對所有敵人造成毀滅性的<span class="text-yellow-400">200%</span>物理傷害。'}] },
+        defensiveStance: { name: '防禦姿態', class:'swordsman', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 6, levels: [{ mpCost: 10, effect: { id: 'defensiveStance', name: '防禦姿態', stat: 'def', value: 20, turns: 3}, description: '[增益] 進入防禦姿態，提升<span class="text-green-400">20</span>點防禦力，持續3回合。'}] },
+        battleCry: { name: '戰吼', class:'swordsman', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 10, levels: [{ mpCost: 18, effect: { id: 'battleCry', name: '戰吼', stat: 'atk', value: 15, turns: 3}, description: '[增益] 發出怒吼，提升<span class="text-green-400">15</span>點攻擊力，持續3回合。'}] },
+        ironWill: { name: '鋼鐵意志', class:'swordsman', type: 'passive', levelReq: 15, levels: [{ description: '[被動] 生命值低於<span class="text-red-400">30%</span>時，防禦力大幅提升。'}] },
+        lastStand: { name: '背水一戰', class:'swordsman', type: 'utility', targetType: 'self', maxLevel: 1, levelReq: 20, prerequisite: { skillId: 'ironWill', level: 1 }, levels: [{ mpCost: 30, description: '[輔助] 消耗大量法力，下一次攻擊必定<span class="text-red-500">暴擊</span>。'}] },
+        bladeStorm: { name: '劍刃風暴', class:'swordsman', type: 'physical', targetType: 'all', maxLevel: 1, levelReq: 25, prerequisite: { skillId: 'whirlwind', level: 3 }, levels: [{ mpCost: 50, damageMultiplier: 2.0, description: '[範圍] 化身為劍刃的風暴，對所有敵人造成毀滅性的<span class="text-yellow-400">200%</span>物理傷害。'}] },
         
         // --- 修士 ---
         spiritualPalm: { name: '靈氣掌', class:'monk', type: 'magical', targetType: 'single', maxLevel: 1, levelReq: 1, levels: [
-            { mpCost: 8, damageMultiplier: 1.8, description: '匯聚靈力於掌心，對敵人造成<span class="text-purple-400">180%</span>靈力的靈力傷害。' },
+            { mpCost: 8, damageMultiplier: 1.8, description: '[單體] 匯聚靈力於掌心，對敵人造成<span class="text-purple-400">180%</span>靈力的靈力傷害。' },
         ]},
         chiWave: { name: '真氣波', class:'monk', type: 'magical', targetType: 'all', maxLevel: 3, levelReq: 3, prerequisite: { skillId: 'spiritualPalm', level: 1 }, levels: [
-            { mpCost: 20, damageMultiplier: 0.9, description: '釋放真氣衝擊波，對所有敵人造成<span class="text-purple-400">90%</span>靈力的靈力傷害。' },
-            { mpCost: 22, damageMultiplier: 1.0, description: '更強的真氣波，造成<span class="text-purple-400">100%</span>靈力的靈力傷害。' },
-            { mpCost: 24, damageMultiplier: 1.1, description: '極致的真氣波，造成<span class="text-purple-400">110%</span>靈力的靈力傷害。' },
+            { mpCost: 20, damageMultiplier: 0.9, description: '[範圍] 釋放真氣衝擊波，對所有敵人造成<span class="text-purple-400">90%</span>靈力的靈力傷害。' },
+            { mpCost: 22, damageMultiplier: 1.0, description: '[範圍] 更強的真氣波，造成<span class="text-purple-400">100%</span>靈力的靈力傷害。' },
+            { mpCost: 24, damageMultiplier: 1.1, description: '[範圍] 極致的真氣波，造成<span class="text-purple-400">110%</span>靈力的靈力傷害。' },
         ]},
         lifeBalance: { name: '生死平衡', class:'monk', type: 'heal_attack', targetType: 'self', maxLevel: 2, levelReq: 5, prerequisite: { skillId: 'chiWave', level: 2 }, levels: [
-            { mpCost: 18, healRatio: 0.5, attackRatio: 0.7, description: '治療自身<span class="text-green-400">50%靈力</span>的生命，並對所有敵人造成<span class="text-purple-400">70%治療量</span>的靈力傷害。' },
-            { mpCost: 20, healRatio: 0.6, attackRatio: 0.8, description: '治療自身<span class="text-green-400">60%靈力</span>的生命，並對所有敵人造成<span class="text-purple-400">80%治療量</span>的靈力傷害。' },
+            { mpCost: 18, healRatio: 0.5, attackRatio: 0.7, description: '[治療/範圍] 治療自身<span class="text-green-400">50%靈力</span>的生命，並對所有敵人造成<span class="text-purple-400">70%治療量</span>的靈力傷害。' },
+            { mpCost: 20, healRatio: 0.6, attackRatio: 0.8, description: '[治療/範圍] 治療自身<span class="text-green-400">60%靈力</span>的生命，並對所有敵人造成<span class="text-purple-400">80%治療量</span>的靈力傷害。' },
         ]},
-        serenity: { name: '心如止水', class:'monk', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 8, levels: [{ mpCost: 22, effect: {id: 'serenity', name: '心如止水', stat: 'spi', value: 15, turns: 3}, description: '進入冥想狀態，大幅提升<span class="text-green-400">15</span>點靈力，持續3回合。'}] },
+        serenity: { name: '心如止水', class:'monk', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 8, levels: [{ mpCost: 22, effect: {id: 'serenity', name: '心如止水', stat: 'spi', value: 15, turns: 3}, description: '[增益] 進入冥想狀態，大幅提升<span class="text-green-400">15</span>點靈力，持續3回合。'}] },
         divineStrike: { name: '神聖打擊', class:'monk', type: 'magical', targetType: 'single', maxLevel: 1, levelReq: 10, prerequisite: { skillId: 'serenity', level: 1 }, levels: [
-            { mpCost: 25, damageMultiplier: 2.5, description: '灌注神聖力量的一擊，造成<span class="text-purple-400">250%</span>靈力傷害，對不死生物有奇效。' },
+            { mpCost: 25, damageMultiplier: 2.5, description: '[單體] 灌注神聖力量的一擊，造成<span class="text-purple-400">250%</span>靈力傷害，對不死生物有奇效。' },
         ]},
-        guardianSpirit: { name: '守護靈', class:'monk', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 7, levels: [{ mpCost: 15, effect: {id: 'guardianSpirit', name: '守護靈', stat: 'def', value: 15, turns: 3}, description: '召喚守護靈，提升<span class="text-green-400">15</span>點防禦，持續3回合。'}]},
-        innerPeace: { name: '心靜如水', class:'monk', type: 'heal', targetType: 'self', maxLevel: 1, levelReq: 13, levels: [{ mpCost: 20, description: '平靜心靈，恢復<span class="text-blue-400">30%</span>最大法力值。'}]},
-        karmaBlade: { name: '業報之刃', class:'monk', type: 'magical', targetType: 'single', maxLevel: 1, levelReq: 18, levels: [{ mpCost: 28, description: '將<span class="text-red-400">已損失的生命值</span>轉化為力量攻擊敵人。'}]},
-        thousandPalms: { name: '千手神通', class:'monk', type: 'magical', targetType: 'random', maxLevel: 1, levelReq: 22, prerequisite: { skillId: 'karmaBlade', level: 1 }, levels: [{ mpCost: 40, hits: 5, description: '以肉眼無法捕捉的速度<span class="text-yellow-400">隨機攻擊5次</span>。'}]},
-        enlightenment: { name: '頓悟', class:'monk', type: 'passive', levelReq: 28, levels: [{ description: '被動：戰鬥中，有機率恢復消耗的法力。'}]},
+        guardianSpirit: { name: '守護靈', class:'monk', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 7, levels: [{ mpCost: 15, effect: {id: 'guardianSpirit', name: '守護靈', stat: 'def', value: 15, turns: 3}, description: '[增益] 召喚守護靈，提升<span class="text-green-400">15</span>點防禦，持續3回合。'}]},
+        innerPeace: { name: '心靜如水', class:'monk', type: 'heal', targetType: 'self', maxLevel: 1, levelReq: 13, levels: [{ mpCost: 20, description: '[治療] 平靜心靈，恢復<span class="text-blue-400">30%</span>最大法力值。'}]},
+        karmaBlade: { name: '業報之刃', class:'monk', type: 'magical', targetType: 'single', maxLevel: 1, levelReq: 18, levels: [{ mpCost: 28, description: '[單體] 將<span class="text-red-400">已損失的生命值</span>轉化為力量攻擊敵人。'}]},
+        thousandPalms: { name: '千手神通', class:'monk', type: 'magical', targetType: 'random', maxLevel: 1, levelReq: 22, prerequisite: { skillId: 'karmaBlade', level: 1 }, levels: [{ mpCost: 40, hits: 5, description: '[隨機] 以肉眼無法捕捉的速度<span class="text-yellow-400">隨機攻擊5次</span>。'}]},
+        enlightenment: { name: '頓悟', class:'monk', type: 'passive', levelReq: 28, levels: [{ description: '[被動] 戰鬥中，有機率恢復消耗的法力。'}]},
 
         // --- 獸人 ---
         savageCleave: { name: '野蠻劈砍', class:'orc', type: 'physical', targetType: 'single', maxLevel: 2, levelReq: 1, levels: [
-            { mpCost: 6, damageMultiplier: 1.6, description: '充滿原始怒意的劈砍，造成<span class="text-yellow-400">160%</span>攻擊力的傷害。' },
-            { mpCost: 8, damageMultiplier: 2.0, description: '更為狂暴的劈砍，造成<span class="text-yellow-400">200%</span>攻擊力的傷害。' },
+            { mpCost: 6, damageMultiplier: 1.6, description: '[單體] 充滿原始怒意的劈砍，造成<span class="text-yellow-400">160%</span>攻擊力的傷害。' },
+            { mpCost: 8, damageMultiplier: 2.0, description: '[單體] 更為狂暴的劈砍，造成<span class="text-yellow-400">200%</span>攻擊力的傷害。' },
         ]},
         earthStomp: { name: '大地踐踏', class:'orc', type: 'physical', targetType: 'all', maxLevel: 2, levelReq: 3, prerequisite: { skillId: 'savageCleave', level: 2 }, levels: [
-            { mpCost: 18, damageMultiplier: 1.0, description: '猛擊地面，對所有敵人造成<span class="text-yellow-400">100%</span>攻擊力的傷害。' },
-            { mpCost: 22, damageMultiplier: 1.2, description: '足以震裂大地的猛擊，造成<span class="text-yellow-400">120%</span>攻擊力的傷害。' },
+            { mpCost: 18, damageMultiplier: 1.0, description: '[範圍] 猛擊地面，對所有敵人造成<span class="text-yellow-400">100%</span>攻擊力的傷害。' },
+            { mpCost: 22, damageMultiplier: 1.2, description: '[範圍] 足以震裂大地的猛擊，造成<span class="text-yellow-400">120%</span>攻擊力的傷害。' },
         ]},
         frenzy: { name: '狂暴', class:'orc', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 5, prerequisite: { skillId: 'savageCleave', level: 1 }, levels: [
-            { hpCost: 0.1, effect: {id: 'frenzy', name: '狂暴', stat: 'atk', value: 20, turns: 3}, description: '犧牲<span class="text-red-400">10%</span>生命，換取<span class="text-green-400">20</span>點攻擊力，持續3回合。' },
+            { hpCost: 0.1, effect: {id: 'frenzy', name: '狂暴', stat: 'atk', value: 20, turns: 3}, description: '[增益] 犧牲<span class="text-red-400">10%</span>生命，換取<span class="text-green-400">20</span>點攻擊力，持續3回合。' },
         ]},
-        brutalCharge: { name: '殘暴衝鋒', class:'orc', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 8, prerequisite: { skillId: 'frenzy', level: 1 }, levels: [{ mpCost: 20, damageMultiplier: 1.8, description: '勢不可擋的衝鋒，造成<span class="text-yellow-400">180%</span>攻擊力的傷害並有機率<span class="text-orange-400">擊暈</span>敵人。'}] },
-        bloodlust: { name: '嗜血渴望', class:'orc', type: 'passive', levelReq: 10, levels: [{ description: '被動：攻擊時，有機會<span class="text-green-400">吸取生命</span>。'}]},
-        taunt: { name: '嘲諷', class:'orc', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 4, levels: [{ mpCost: 10, description: '<span class="text-orange-400">激怒</span>一個敵人，使其強制攻擊你。'}] },
-        stoneSkin: { name: '石膚', class:'orc', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 7, levels: [{ mpCost: 12, effect: {id: 'stoneSkinOrc', name: '石膚', stat: 'def', value: 25, turns: 3}, description: '讓皮膚像石頭一樣堅硬，提升<span class="text-green-400">25</span>點防禦，持續3回合。'}]},
-        overwhelm: { name: '壓制', class:'orc', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 14, prerequisite: { skillId: 'bloodlust', level: 1 }, levels: [{ mpCost: 25, damageMultiplier: 2.5, description: '對生命值低於<span class="text-red-400">50%</span>的敵人造成<span class="text-yellow-400">250%</span>的巨大傷害。'}]},
-        unbreakable: { name: '不倒', class:'orc', type: 'utility', targetType: 'self', maxLevel: 1, levelReq: 19, levels: [{ mpCost: 40, description: '短時間內，無論如何都<span class="text-green-400">不會倒下</span>。'}]},
-        rampage: { name: '暴走', class:'orc', type: 'passive', levelReq: 26, levels: [{ description: '被動：擊敗敵人時會進入<span class="text-red-500">暴走</span>狀態，攻擊力提升。'}]},
+        brutalCharge: { name: '殘暴衝鋒', class:'orc', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 8, prerequisite: { skillId: 'frenzy', level: 1 }, levels: [{ mpCost: 20, damageMultiplier: 1.8, description: '[單體] 勢不可擋的衝鋒，造成<span class="text-yellow-400">180%</span>攻擊力的傷害並有機率<span class="text-orange-400">擊暈</span>敵人。'}] },
+        bloodlust: { name: '嗜血渴望', class:'orc', type: 'passive', levelReq: 10, levels: [{ description: '[被動] 攻擊時，有機會<span class="text-green-400">吸取生命</span>。'}]},
+        taunt: { name: '嘲諷', class:'orc', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 4, levels: [{ mpCost: 10, description: '[減益] <span class="text-orange-400">激怒</span>一個敵人，使其強制攻擊你。'}] },
+        stoneSkin: { name: '石膚', class:'orc', type: 'buff', targetType: 'self', maxLevel: 1, levelReq: 7, levels: [{ mpCost: 12, effect: {id: 'stoneSkinOrc', name: '石膚', stat: 'def', value: 25, turns: 3}, description: '[增益] 讓皮膚像石頭一樣堅硬，提升<span class="text-green-400">25</span>點防禦，持續3回合。'}]},
+        overwhelm: { name: '壓制', class:'orc', type: 'physical', targetType: 'single', maxLevel: 1, levelReq: 14, prerequisite: { skillId: 'bloodlust', level: 1 }, levels: [{ mpCost: 25, damageMultiplier: 2.5, description: '[單體] 對生命值低於<span class="text-red-400">50%</span>的敵人造成<span class="text-yellow-400">250%</span>的巨大傷害。'}]},
+        unbreakable: { name: '不倒', class:'orc', type: 'utility', targetType: 'self', maxLevel: 1, levelReq: 19, levels: [{ mpCost: 40, description: '[輔助] 短時間內，無論如何都<span class="text-green-400">不會倒下</span>。'}]},
+        rampage: { name: '暴走', class:'orc', type: 'passive', levelReq: 26, levels: [{ description: '[被動] 擊敗敵人時會進入<span class="text-red-500">暴走</span>狀態，攻擊力提升。'}]},
         
         // --- 死靈 ---
         boneSpear: { name: '骸骨之矛', class:'necromancer', type: 'magical', targetType: 'single', maxLevel: 2, levelReq: 1, levels: [
-            { mpCost: 10, damageMultiplier: 1.8, description: '用死者骨骼化成的長矛穿刺敵人，造成<span class="text-purple-400">180%</span>靈力的傷害。' },
-            { mpCost: 12, damageMultiplier: 2.2, description: '更鋒利，更致命的骸骨之矛，造成<span class="text-purple-400">220%</span>靈力的傷害。' },
+            { mpCost: 10, damageMultiplier: 1.8, description: '[單體] 用死者骨骼化成的長矛穿刺敵人，造成<span class="text-purple-400">180%</span>靈力的傷害。' },
+            { mpCost: 12, damageMultiplier: 2.2, description: '[單體] 更鋒利，更致命的骸骨之矛，造成<span class="text-purple-400">220%</span>靈力的傷害。' },
         ]},
         boneNova: { name: '骸骨新星', class:'necromancer', type: 'magical', targetType: 'all', maxLevel: 2, levelReq: 3, prerequisite: { skillId: 'boneSpear', level: 2 }, levels: [
-            { mpCost: 25, damageMultiplier: 1.3, description: '引爆骸骨碎片，對所有敵人造成<span class="text-purple-400">130%</span>靈力的傷害。' },
-            { mpCost: 30, damageMultiplier: 1.5, description: '更大範圍的骸骨爆炸，造成<span class="text-purple-400">150%</span>靈力的傷害。' },
+            { mpCost: 25, damageMultiplier: 1.3, description: '[範圍] 引爆骸骨碎片，對所有敵人造成<span class="text-purple-400">130%</span>靈力的傷害。' },
+            { mpCost: 30, damageMultiplier: 1.5, description: '[範圍] 更大範圍的骸骨爆炸，造成<span class="text-purple-400">150%</span>靈力的傷害。' },
         ]},
         lifeDrain: { name: '生命汲取', class:'necromancer', type: 'magical_drain', targetType: 'single', maxLevel: 1, levelReq: 5, prerequisite: { skillId: 'boneSpear', level: 1 }, levels: [
-            { mpCost: 18, damageMultiplier: 1.5, drainRatio: 0.5, description: '吸取敵人的生命力來治療自己，造成<span class="text-purple-400">150%</span>靈力傷害並恢復<span class="text-green-400">一半</span>傷害的生命。' },
+            { mpCost: 18, damageMultiplier: 1.5, drainRatio: 0.5, description: '[單體] 吸取敵人的生命力來治療自己，造成<span class="text-purple-400">150%</span>靈力傷害並恢復<span class="text-green-400">一半</span>傷害的生命。' },
         ]},
-        curse: { name: '詛咒', class:'necromancer', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 8, levels: [{ mpCost: 15, effect: {id: 'curse', name: '詛咒', stat: 'def', value: -15, turns: 3}, description: '<span class="text-orange-400">削弱</span>敵人的防禦，持續3回合。'}] },
-        shadowStep: { name: '暗影步伐', class:'necromancer', type: 'utility', levelReq: 10, prerequisite: { skillId: 'curse', level: 1 }, levels: [{ mpCost: 12, description: '融入陰影，提升下一次攻擊的<span class="text-red-500">暴擊</span>機會。'}]},
-        summonSkeleton: { name: '召喚骷髏', class:'necromancer', type: 'summon', targetType: 'self', maxLevel: 1, levelReq: 4, levels: [{ mpCost: 20, description: '從地下召喚骷髏為你作戰。(暫未實現)'}]},
-        corpseExplosion: { name: '屍爆', class:'necromancer', type: 'magical', targetType: 'all', maxLevel: 1, levelReq: 11, prerequisite: { skillId: 'boneNova', level: 2 }, levels: [{ mpCost: 22, description: '引爆屍體，對敵人造成範圍傷害。(暫未實現)'}]},
-        soulSiphon: { name: '靈魂虹吸', class:'necromancer', type: 'magical_drain', targetType: 'single', maxLevel: 1, levelReq: 16, levels: [{ mpCost: 25, description: '<span class="text-blue-400">吸取</span>敵人的法力。'}]},
-        fear: { name: '恐懼', class:'necromancer', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 21, levels: [{ mpCost: 30, description: '讓敵人陷入<span class="text-orange-400">恐懼</span>而無法行動。'}]},
-        deathPact: { name: '死亡契約', class:'necromancer', type: 'passive', levelReq: 27, levels: [{ description: '被動：死亡時，釋放最後的力量<span class="text-red-500">反噬</span>所有敵人。'}]},
+        curse: { name: '詛咒', class:'necromancer', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 8, levels: [{ mpCost: 15, effect: {id: 'curse', name: '詛咒', stat: 'def', value: -15, turns: 3}, description: '[減益] <span class="text-orange-400">削弱</span>敵人的防禦，持續3回合。'}] },
+        shadowStep: { name: '暗影步伐', class:'necromancer', type: 'utility', levelReq: 10, prerequisite: { skillId: 'curse', level: 1 }, levels: [{ mpCost: 12, description: '[輔助] 融入陰影，提升下一次攻擊的<span class="text-red-500">暴擊</span>機會。'}]},
+        summonSkeleton: { name: '召喚骷髏', class:'necromancer', type: 'summon', targetType: 'self', maxLevel: 1, levelReq: 4, levels: [{ mpCost: 20, description: '[輔助] 從地下召喚骷髏為你作戰。(暫未實現)'}]},
+        corpseExplosion: { name: '屍爆', class:'necromancer', type: 'magical', targetType: 'all', maxLevel: 1, levelReq: 11, prerequisite: { skillId: 'boneNova', level: 2 }, levels: [{ mpCost: 22, description: '[範圍] 引爆屍體，對敵人造成範圍傷害。(暫未實現)'}]},
+        soulSiphon: { name: '靈魂虹吸', class:'necromancer', type: 'magical_drain', targetType: 'single', maxLevel: 1, levelReq: 16, levels: [{ mpCost: 25, description: '[單體] <span class="text-blue-400">吸取</span>敵人的法力。'}]},
+        fear: { name: '恐懼', class:'necromancer', type: 'debuff', targetType: 'single', maxLevel: 1, levelReq: 21, levels: [{ mpCost: 30, description: '[減益] 讓敵人陷入<span class="text-orange-400">恐懼</span>而無法行動。'}]},
+        deathPact: { name: '死亡契約', class:'necromancer', type: 'passive', levelReq: 27, levels: [{ description: '[被動] 死亡時，釋放最後的力量<span class="text-red-500">反噬</span>所有敵人。'}]},
 
         // --- 怪物技能 ---
         goblinRush: { name: '哥布林猛衝', type: 'physical', targetType: 'single', damageMultiplier: 1.1 },
@@ -309,20 +309,20 @@ const DATABASE = {
         multiBite: { name: '多重撕咬', type: 'physical', targetType: 'random', hits: 3, damageMultiplier: 0.8 },
         elementalBlast: { name: '元素爆發', type: 'magical', targetType: 'all', damageMultiplier: 1.3 }
     },
+    // [修正] 補全地圖說明
     locations: {
         oakwood: { name: "橡木鎮", description: "一個被森林環繞的寧靜小鎮，但最近似乎不太平靜。" },
-        whisperingWoods: { name: "低語森林", monsters: ['slime', 'goblin', 'forestSpider'], levelRange: [1, 3], requiredLevel: 1, storyReq: 'main01' },
-        boarPlains: { name: "野豬平原", monsters: ['wildBoar', 'wolf', 'zombie'], levelRange: [3, 5], requiredLevel: 3, storyReq: 'main03' },
-        goblinCamp: { name: "哥布林營地", monsters: ['goblin', 'goblinWarrior', 'hobgoblin', 'giantBat'], levelRange: [4, 7], requiredLevel: 5, storyReq: 'main03' },
-        orcOutpost: { name: "獸人前哨", monsters: ['orcGrunt', 'orcShaman', 'imp'], levelRange: [7, 10], requiredLevel: 8, storyReq: 'main04' },
-        hauntedCemetery: { name: '荒廢墓園', monsters: ['skeleton', 'wraith', 'hauntedArmor', 'mimic'], levelRange: [10, 14], requiredLevel: 11, storyReq: 'main05' },
-        dragonPeak: { name: '巨龍之巔', monsters: ['ancientDragon'], levelRange: [50, 50], requiredLevel: 45, storyReq: 'main06' },
+        whisperingWoods: { name: "低語森林", description: "新手冒險者的試煉場，充滿了哥布林與野生動物。", monsters: ['slime', 'goblin', 'forestSpider'], levelRange: [1, 3], requiredLevel: 1, storyReq: 'main01' },
+        boarPlains: { name: "野豬平原", description: "開闊的平原，是野豬和狼群的家園。", monsters: ['wildBoar', 'wolf', 'zombie'], levelRange: [3, 5], requiredLevel: 3, storyReq: 'main03' },
+        goblinCamp: { name: "哥布林營地", description: "哥布林們聚集的營地，由更強大的戰士守衛著。", monsters: ['goblin', 'goblinWarrior', 'hobgoblin', 'giantBat'], levelRange: [4, 7], requiredLevel: 5, storyReq: 'main03' },
+        orcOutpost: { name: "獸人前哨", description: "獸人部落的前線哨站，瀰漫著戰爭的氣息。", monsters: ['orcGrunt', 'orcShaman', 'imp'], levelRange: [7, 10], requiredLevel: 8, storyReq: 'main04' },
+        hauntedCemetery: { name: '荒廢墓園', description: "不安的靈魂在此徘徊，生者勿近的詛咒之地。", monsters: ['skeleton', 'wraith', 'hauntedArmor', 'mimic'], levelRange: [10, 14], requiredLevel: 11, storyReq: 'main05' },
+        dragonPeak: { name: '巨龍之巔', description: "傳說的頂峰，只有最強大的英雄才敢挑戰遠古巨龍。", monsters: ['ancientDragon'], levelRange: [50, 50], requiredLevel: 45, storyReq: 'main06' },
     },
     npcs: {
         elder: { name: "村長", type: "quest" },
         blacksmith: { name: "鐵匠", type: "quest" }
     },
-    // [修復][問題11, 12] 任務全中文化，並修正NPC對應
     quests: {
         main01: { id: 'main01', title: "森林裡的麻煩", npc: "elder", objective: { type: 'kill', target: 'goblin', current: 0, total: 5 }, reward: { exp: 150, items: [{ itemId: 'healingEgg', quantity: 5 }], gold: 50, skillPoints: 1 }, levelReq: 1, onComplete: (p) => { p.storyProgress = 'main02'; } },
         main02: { id: 'main02', title: "第一次裝備", npc: "blacksmith", objective: { type: 'equip', target: 'any', current: 0, total: 1 }, reward: { exp: 50, items: [{ itemId: 'courageBadge', quantity: 1 }], gold: 20 }, levelReq: 1, onComplete: (p) => { p.storyProgress = 'main03'; } },
@@ -355,7 +355,7 @@ const game = {
     state: { player: null, currentScreen: 'start-screen', isFirebaseReady: false, dialogueCallback: null, isRunning: false, lastActionTime: 0, codex: {monsters: [], items: [], weapons: [], armors: []}, canRest: true },
 
     async init() {
-        this.audio.init(); // [新增] 初始化音效
+        this.audio.init();
         await this.initFirebase();
         this.ui.showScreen('start-screen');
         this.addEventListeners();
@@ -377,14 +377,12 @@ const game = {
         } catch (error) { console.error("Firebase initialization failed:", error); }
     },
     
-    // [修正] 改用事件委派模式 (Sec 3.2)
     addEventListeners() {
         const gameWindow = document.getElementById('game-window');
         
         gameWindow.addEventListener('click', (e) => {
             const target = e.target;
 
-            // [新增] 為所有按鈕點擊播放音效
             if(target.closest('button')) this.audio.playSFX('click');
 
             const actionButton = target.closest('[data-action]');
@@ -467,6 +465,7 @@ const game = {
             equipment: { weapon: null, armor: null, accessory: null },
             skills: { ...classData.skills },
             quests: {},
+            completedQuests: [], // [新增] 追蹤已完成的任務
             storyProgress: 'main01',
             activeEffects: []
         };
@@ -541,7 +540,7 @@ const game = {
             this.recalculateStats();
             p.stats.hp = p.maxStats.hp; p.stats.mp = p.maxStats.mp;
             game.quests.advance('level', 'any');
-            game.audio.playSFX('level_up'); // [新增] 升級音效
+            game.audio.playSFX('level_up');
         },
         recalculateStats() {
             const p = game.state.player;
@@ -560,7 +559,7 @@ const game = {
                 }
             }
 
-            // [修正] 狀態效果 (Buff/Debuff) 加成 (Sec 2.4)
+            // 狀態效果 (Buff/Debuff) 加成
             const statBuffs = {};
             p.activeEffects.forEach(effect => {
                 if (effect.stat && effect.value) {
@@ -642,20 +641,16 @@ const game = {
                         p.stats.mp = Math.min(p.maxStats.mp, p.stats.mp + effect.value);
                          if (isCombat) game.ui.showCombatLogMessage(`${p.name} 恢復了 ${effect.value} 點法力。`, 'text-blue-400');
                         break;
-                    // [修正] 實現 buff 藥水效果 (Sec 2.4)
                     case 'buff':
                         if (isCombat) {
                            game.combat.applyEffect(p, { ...effect });
                            game.ui.showCombatLogMessage(`${p.name} 的 ${LOCALIZATION_MAP.stats[effect.stat]} 提升了！`, 'text-yellow-400');
-                        } else {
-                           // 非戰鬥中暫不實現
                         }
                         break;
                     case 'escape':
-                        if (isCombat) game.combat.playerAction('run', true); // true for guaranteed escape
+                        if (isCombat) game.combat.playerAction('run', true);
                         break;
                     case 'cure':
-                        // TODO: 實現異常狀態解除
                         break;
                 }
                 effectApplied = true;
@@ -712,24 +707,38 @@ const game = {
                 return;
             }
             
-            p.quests[questId] = { ...questData.objective, status: 'active' };
+            p.quests[questId] = { ...questData.objective };
+            if (questData.objective.type === 'level') {
+                p.quests[questId].current = p.level;
+            } else {
+                 p.quests[questId].current = 0;
+            }
+             p.quests[questId].status = 'active';
+
             game.ui.updateHubUI();
             game.ui.showModal({ title: '新任務', body: `<p>你接受了任務: ${questData.title}</p>`, buttons: [{text: '好的', fn: () => game.ui.closeModal()}]});
         },
+        // [修正] 任務進度更新邏輯
         advance(type, target) {
             const p = game.state.player;
             for (const questId in p.quests) {
                 const quest = p.quests[questId];
-                if (quest.status === 'active' && quest.type === type && (quest.target === target || quest.target === 'any')) {
-                     if (quest.current < quest.total) {
-                        quest.current++;
-                     }
-                    if(quest.current >= quest.total) {
-                        quest.status = 'completed';
-                        game.ui.showModal({ title: '任務目標達成！', body: `<p>你完成了任務目標: ${DATABASE.quests[questId].title}！回去找NPC回報吧。</p>`, buttons: [{text: '好的', fn: () => game.ui.closeModal()}]});
+                if (quest.status !== 'active') continue;
+
+                if (quest.type === type && (quest.target === target || quest.target === 'any')) {
+                    if (quest.type === 'level') {
+                        quest.current = p.level;
+                    } else {
+                        if (quest.current < quest.total) {
+                           quest.current++;
+                        }
                     }
-                    game.ui.updateHubUI();
-                }
+                   if (quest.current >= quest.total) {
+                       quest.status = 'completed';
+                       game.ui.showModal({ title: '任務目標達成！', body: `<p>你完成了任務目標: ${DATABASE.quests[questId].title}！回去找NPC回報吧。</p>`, buttons: [{text: '好的', fn: () => game.ui.closeModal()}]});
+                   }
+                   game.ui.updateHubUI();
+               }
             }
         },
         isComplete(questId) {
@@ -763,6 +772,7 @@ const game = {
             if (questData.onComplete) { questData.onComplete(p);
             }
             delete p.quests[questId];
+            p.completedQuests.push(questId); // [新增] 記錄已完成的任務
             game.ui.showModal({
                 title: '任務完成！',
                 body: `<p>你完成了任務 "${questData.title}"！</p><hr class="my-2 border-gray-600"><p>獲得獎勵：</p>${rewardHTML}`,
@@ -787,9 +797,17 @@ const game = {
                 monsterCount = Math.random() < 0.7 ? 2 : 3;
             }
             
+            const activeKillQuest = Object.values(game.state.player.quests).find(q => q.status === 'active' && q.type === 'kill');
             const encounterGroup = [];
             for (let i = 0; i < monsterCount; i++) {
-                encounterGroup.push(possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)].id);
+                 let selectedMonsterId;
+                 // [新增] 如果有任務怪，提高其出現機率
+                 if (activeKillQuest && location.monsters.includes(activeKillQuest.target) && Math.random() < 0.5) {
+                     selectedMonsterId = activeKillQuest.target;
+                 } else {
+                     selectedMonsterId = possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)].id;
+                 }
+                encounterGroup.push(selectedMonsterId);
             }
 
             if(encounterGroup.length === 0) { game.ui.showModal({title: '空無一人', body: '<p>這片區域暫時沒有敵人。</p>', buttons: [{text: '返回', fn: () => game.ui.closeModal()}]});
@@ -809,7 +827,7 @@ const game = {
             if (game.state.isRunning) return;
             game.state.isRunning = true;
 
-            game.state.player.isPlayer = true; // [修改] 為玩家物件添加 isPlayer 標記
+            game.state.player.isPlayer = true;
             this.state.enemies = enemyIds.map((id, index) => {
                 const template = JSON.parse(JSON.stringify(DATABASE.monsters[id]));
                 game.player.addCodexEntryForItem(id, 'monsters');
@@ -890,7 +908,7 @@ const game = {
                     }
                     break;
                 case 'run':
-                    if (option === true) { // Guaranteed escape from smoke bomb
+                    if (option === true) {
                         game.ui.showCombatLogMessage('你使用了煙霧彈，成功逃跑了！');
                         this.end(false, true); return;
                     }
@@ -920,7 +938,7 @@ const game = {
             const usableSkills = enemy.skills.filter(id => {
                 const skill = DATABASE.skills[id];
                 if (!skill) return false;
-                const cost = skill.levels ? skill.levels[0].mpCost : skill.mpCost;
+                const cost = skill.levels ? skill.levels[0].mpCost : 0;
                 return !cost || cost <= enemy.stats.mp;
             });
             if (usableSkills.length > 0 && Math.random() < 0.4) {
@@ -932,7 +950,6 @@ const game = {
             setTimeout(() => this.processTurnEnd(), 1000);
         },
         processTurnEnd() {
-            // Tick down effects for all combatants
             const allCombatants = [game.state.player, ...this.state.enemies];
             allCombatants.forEach(unit => {
                 if (unit.stats.hp > 0 && unit.activeEffects.length > 0) {
@@ -941,7 +958,6 @@ const game = {
                     if (unit.isPlayer) game.player.recalculateStats();
                 }
             });
-
 
             const defeatedThisTurn = this.state.enemies.filter(e => e.stats.hp <= 0 && !this.state.defeatedEnemiesInCombat.find(d => d.id === e.id));
             defeatedThisTurn.forEach(e => this.state.defeatedEnemiesInCombat.push(e));
@@ -965,19 +981,17 @@ const game = {
         },
         toggleActionButtons(enabled) { document.querySelectorAll('#combat-action-area button').forEach(btn => btn.disabled = !enabled);
         },
-        // [修改] 讓此函式返回造成的傷害值
         executeAttack(attacker, defender, multiplier = 1.0, isSkill = false, isMagical = false) {
             const hitRate = 80 + (attacker.maxStats.hit * 1.5) - (defender.maxStats.eva * 1.0);
             const finalHitChance = Math.max(10, Math.min(95, hitRate));
 
             if (Math.random() * 100 > finalHitChance) {
                 game.ui.showCombatLogMessage(`${attacker.name} 的攻擊被 ${defender.name} 閃避了！`, 'text-gray-400');
-                return 0; // [修改]
+                return 0;
             }
             
             let damage;
             
-            // 混合職業普攻傷害調整
             if (!isSkill) {
                 if (attacker.class === 'necromancer') {
                     damage = Math.round(attacker.maxStats.atk * 0.2 + attacker.maxStats.spi * 0.7);
@@ -995,7 +1009,7 @@ const game = {
             }
             
             damage = Math.max(1, Math.round(damage * multiplier));
-            return this.applyDamage(attacker, defender, damage, isMagical); // [修改]
+            return this.applyDamage(attacker, defender, damage, isMagical);
         },
         executeSkill(attacker, skillId, target) {
             const skillData = DATABASE.skills[skillId];
@@ -1006,6 +1020,7 @@ const game = {
             const mpCost = skillInfo.mpCost || 0;
             const hpCostPercent = skillInfo.hpCost || 0;
             const hpCost = Math.round(attacker.maxStats.hp * hpCostPercent);
+
             if (attacker.stats.mp < mpCost || attacker.stats.hp <= hpCost) {
                 if (attacker.isPlayer) game.ui.showCombatLogMessage('資源不足！', 'text-red-500');
                 return false;
@@ -1022,8 +1037,15 @@ const game = {
                 targets = target ? [target] : [];
             } else if (skillData.targetType === 'all') {
                 targets = attacker.isPlayer ? [...this.state.enemies.filter(e => e.stats.hp > 0)] : [game.state.player];
-                // [修復] 增加一道額外的安全過濾，確保範圍技不會打到自己人
                 targets = targets.filter(t => t.isPlayer !== attacker.isPlayer);
+            } else if (skillData.targetType === 'random') {
+                const hits = skillInfo.hits || 1;
+                const potentialTargets = attacker.isPlayer ? this.state.enemies.filter(e => e.stats.hp > 0) : [game.state.player];
+                if (potentialTargets.length > 0) {
+                    for (let i = 0; i < hits; i++) {
+                        targets.push(potentialTargets[Math.floor(Math.random() * potentialTargets.length)]);
+                    }
+                }
             } else if (skillData.targetType === 'self') {
                 targets = [attacker];
             }
@@ -1035,17 +1057,11 @@ const game = {
                 targets.forEach(t => {
                     this.executeAttack(attacker, t, damageMultiplier, true, isMagical);
                 });
-            } else if (skillData.type === 'magical_drain') { // [修復] 補全生命汲取技能邏輯
+            } else if (skillData.type === 'magical_drain') {
                 const damageMultiplier = skillInfo.damageMultiplier ?? 1.0;
                 const drainRatio = skillInfo.drainRatio ?? 0.5;
-                
                 targets.forEach(t => {
-                    const attackStat = attacker.maxStats.spi;
-                    const defenseStat = t.maxStats.spi;
-                    const baseDamage = Math.round(attackStat * (attackStat / (attackStat + defenseStat)));
-                    const skillDamage = Math.max(1, Math.round(baseDamage * damageMultiplier));
-                    const damageDealt = this.applyDamage(attacker, t, skillDamage, true);
-
+                    const damageDealt = this.executeAttack(attacker, t, damageMultiplier, true, true);
                     if (damageDealt > 0) {
                         const healAmount = Math.round(damageDealt * drainRatio);
                         attacker.stats.hp = Math.min(attacker.maxStats.hp, attacker.stats.hp + healAmount);
@@ -1071,7 +1087,6 @@ const game = {
             return true;
         },
         applyEffect(target, effect) {
-            // 簡易實現：不處理疊加，直接替換同 id 的效果
             const existingEffectIndex = target.activeEffects.findIndex(e => e.id === effect.id);
             if (existingEffectIndex > -1) {
                 target.activeEffects[existingEffectIndex] = effect;
@@ -1082,7 +1097,6 @@ const game = {
                 game.player.recalculateStats();
             }
         },
-        // [修改] 讓此函式返回造成的傷害值
         applyDamage(attacker, defender, damage, isMagical) {
             if (isNaN(damage)) {
                 console.error("NaN damage detected. Attacker:", attacker, "Defender:", defender);
@@ -1106,14 +1120,14 @@ const game = {
 
             game.ui.updateUnitHP(defender, oldHp);
             if (defender.stats.hp <= 0) game.ui.showCombatLogMessage(`${defenderName} 被擊敗了！`, 'text-gray-400');
-            return damage; // [修改]
+            return damage;
         },
         end(win, fled = false) {
             this.state.actionInProgress = false;
             this.toggleActionButtons(true);
             game.state.isRunning = false;
             game.state.canRest = true;
-            game.state.player.activeEffects = []; // 清除戰鬥狀態
+            game.state.player.activeEffects = [];
             game.player.recalculateStats();
 
             game.audio.stopBGM();
@@ -1161,6 +1175,15 @@ const game = {
                     title: '<span class="text-green-400">戰鬥勝利！</span>', body: `<p class="text-yellow-400">獲得經驗值: ${totalExp}</p><hr class="my-2 border-gray-600"> ${lootHTML}`,
                     buttons: [{ text: '繼續', fn: () => { game.ui.closeModal(); game.ui.showScreen('hub-screen'); } }]
                 });
+                
+                // [新增] 戰鬥勝利後自動返回
+                setTimeout(() => {
+                    if (game.state.currentScreen === 'combat-screen') {
+                        game.ui.closeModal();
+                        game.ui.showScreen('hub-screen');
+                    }
+                }, 4000);
+
             } else { 
                 game.audio.playSFX('lose');
                 game.ui.showModal({ 
@@ -1286,7 +1309,7 @@ const game = {
                 const levelText = isDisabled ? `<span class="text-sm text-red-400"> (故事未解鎖)</span>` : `<span class="text-sm text-gray-400">(Lv.${loc.levelRange[0]}+)</span>`;
                 
                 locationsHTML += `<button data-loc-id="${locId}" class="${buttonClasses}" ${isDisabled ? 'disabled' : ''}>
-                    <div><h4 class="font-bold text-lg">${loc.name} ${levelText}</h4><p class="text-sm text-gray-400">${loc.description}</p></div>
+                    <div><h4 class="font-bold text-lg">${loc.name} ${levelText}</h4><p class="text-sm text-gray-400">${loc.description || ''}</p></div>
                 </button>`;
             }
             this.showModal({
@@ -1324,8 +1347,12 @@ const game = {
                     dialogueKey = 'questInProgress';
                     buttons.push({ text: "我會盡快", fn: () => this.closeModal() });
                 } else {
+                    // [修正] 增加 completedQuests 檢查，防止重複接取
                     const nextQuestId = Object.keys(DATABASE.quests).find(id => 
-                        DATABASE.quests[id].npc === npcId && !p.quests[id] && p.storyProgress === id
+                        DATABASE.quests[id].npc === npcId && 
+                        !p.quests[id] && 
+                        !p.completedQuests.includes(id) &&
+                        p.storyProgress === id
                     );
 
                     if (nextQuestId) {
@@ -1471,14 +1498,24 @@ const game = {
                 return `<span class="${color}">${index + 1}</span>`;
             }).join(' - ');
             
-            const questLog = document.getElementById('hub-quest-log');
+            // [修正] 任務日誌顯示邏輯
             let questHTML = '';
             for (const questId in p.quests) {
                 const quest = p.quests[questId];
                 const questData = DATABASE.quests[questId];
-                const targetName = DATABASE.monsters[quest.target]?.name || quest.target;
+                let objectiveText = '';
                 if (quest.status === 'active') {
-                    questHTML += `<div class="mt-2"><p class="font-bold text-green-400">${questData.title}</p><p class="text-sm text-gray-400">- ${targetName} (${quest.current}/${quest.total})</p></div>`;
+                    if (quest.type === 'kill') {
+                        const monsterName = DATABASE.monsters[quest.target]?.name || quest.target;
+                        objectiveText = `擊敗 ${monsterName} (${quest.current}/${quest.total})`;
+                    } else if (quest.type === 'equip') {
+                        objectiveText = `裝備一件任意裝備 (${quest.current}/${quest.total})`;
+                    } else if (quest.type === 'level') {
+                        objectiveText = `提升等級 (${p.level}/${quest.total})`;
+                    } else {
+                        objectiveText = `${quest.target} (${quest.current}/${quest.total})`;
+                    }
+                    questHTML += `<div class="mt-2"><p class="font-bold text-green-400">${questData.title}</p><p class="text-sm text-gray-400">- ${objectiveText}</p></div>`;
                 } else if (quest.status === 'completed') {
                     questHTML += `<div class="mt-2"><p class="font-bold text-yellow-400">${questData.title} (完成)</p><p class="text-sm text-gray-400">- 前往 ${DATABASE.npcs[questData.npc]?.name || ''} 回報</p></div>`;
                 }
@@ -1755,10 +1792,8 @@ const game = {
             }
             render();
         },
-        // [修復] 冒險圖冊功能
         showCodexModal() {
             document.getElementById('codex-modal').classList.remove('hidden');
-            // 直接呼叫渲染函式，而不是模擬點擊，這樣更穩定
             const defaultTab = document.querySelector('.codex-tab-button[data-tab="monsters"]');
             document.querySelectorAll('.codex-tab-button').forEach(b => b.classList.remove('active'));
             if(defaultTab) defaultTab.classList.add('active');
@@ -1791,7 +1826,7 @@ const game = {
             const el = document.getElementById(elementId);
             if (el) { 
                 el.classList.remove('hit-effect');
-                void el.offsetWidth; // Trigger reflow
+                void el.offsetWidth;
                 el.classList.add('hit-effect');
             }
         }
@@ -1804,8 +1839,8 @@ const game = {
             game.ui.showModal({ title: '正在儲存至雲端...', body: '', buttons: []});
             try {
                 const saveState = JSON.parse(JSON.stringify(game.state));
-                delete saveState.dialogueCallback; // Functions can't be saved in JSON
-                delete saveState.currentScreen; // Don't save transient state
+                delete saveState.dialogueCallback;
+                delete saveState.currentScreen;
                 const saveRef = doc(db, 'artifacts', appId, 'users', userId, 'savegames', 'slot1');
                 await setDoc(saveRef, saveState);
                 game.ui.showModal({ title: '<span class="text-green-400">雲端存檔成功！</span>', body: '<p>你的進度已安全保存。</p>', buttons: [{ text: '好的', fn: () => game.ui.closeModal() }]});
@@ -1827,15 +1862,14 @@ const game = {
                 const docSnap = await getDoc(saveRef);
                 if (docSnap.exists()) { 
                     const loadedState = docSnap.data();
-                    // Restore non-JSON-able or transient state properties
                     loadedState.isRunning = false;
                     loadedState.actionInProgress = false;
                     loadedState.currentScreen = 'hub-screen';
-                    if (!loadedState.codex) { // Backwards compatibility for old saves
+                    if (!loadedState.codex) {
                         loadedState.codex = {monsters: [], items: [], weapons: [], armors: []};
                     }
-                     if (!loadedState.activeEffects) {
-                        loadedState.activeEffects = [];
+                     if (!loadedState.player.completedQuests) { // Backwards compatibility
+                        loadedState.player.completedQuests = [];
                     }
                     game.state = loadedState;
                     game.ui.closeModal();
@@ -1849,19 +1883,18 @@ const game = {
         }
     },
     
-    // [修改] 音效管理系統
     audio: {
         sounds: {},
         currentBGM: null,
         init() {
             const placeholderWarning = (name) => {
-                console.warn(`Audio source for '${name}' is not set. Sound will not play. Please provide a valid URL in game.audio.init().`);
-                return ''; // 返回空字串以避免錯誤
+                console.warn(`Audio source for '${name}' is not set. Sound will not play. Please provide a valid URL/path in game.audio.init().`);
+                return '';
             };
 
             // ===== 請在這裡填寫你的音檔路徑 =====
             const audioPaths = {
-                hub: 'REPLACE_WITH_URL_TO/hub_music.mp3',
+                hub: 'https://cdn.pixabay.com/download/audio/2022/08/04/audio_bb63029199.mp3', // 範例BGM，可直接使用
                 combat: 'REPLACE_WITH_URL_TO/combat_music.mp3',
                 click: 'REPLACE_WITH_URL_TO/click.mp3',
                 attack_hit: 'REPLACE_WITH_URL_TO/attack.mp3',
@@ -1891,7 +1924,7 @@ const game = {
         },
         playBGM(track) {
             const audio = this.sounds[track];
-            if (!audio || !audio.src) return; 
+            if (!audio || !audio.src.includes('http')) return; 
 
             if (this.currentBGM && this.currentBGM !== audio) {
                 this.currentBGM.pause();
@@ -1911,7 +1944,7 @@ const game = {
         },
         playSFX(sfx) {
             const audio = this.sounds[sfx];
-            if (!audio || !audio.src) return;
+            if (!audio || !audio.src.includes('http')) return;
             audio.currentTime = 0;
             audio.play().catch(e => console.log(`SFX '${sfx}' play failed.`));
         }
