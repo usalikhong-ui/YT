@@ -355,6 +355,7 @@ const game = {
     state: { player: null, currentScreen: 'start-screen', isFirebaseReady: false, dialogueCallback: null, isRunning: false, lastActionTime: 0, codex: {monsters: [], items: [], weapons: [], armors: []}, canRest: true },
 
     async init() {
+        this.audio.init(); // [新增] 初始化音效
         await this.initFirebase();
         this.ui.showScreen('start-screen');
         this.addEventListeners();
@@ -382,6 +383,10 @@ const game = {
         
         gameWindow.addEventListener('click', (e) => {
             const target = e.target;
+
+            // [新增] 為所有按鈕點擊播放音效
+            if(target.closest('button')) this.audio.playSFX('click');
+
             const actionButton = target.closest('[data-action]');
             const codexTabButton = target.closest('.codex-tab-button');
             const npcButton = target.closest('.npc-talk-btn');
@@ -536,6 +541,7 @@ const game = {
             this.recalculateStats();
             p.stats.hp = p.maxStats.hp; p.stats.mp = p.maxStats.mp;
             game.quests.advance('level', 'any');
+            game.audio.playSFX('level_up'); // [新增] 升級音效
         },
         recalculateStats() {
             const p = game.state.player;
@@ -803,6 +809,7 @@ const game = {
             if (game.state.isRunning) return;
             game.state.isRunning = true;
 
+            game.state.player.isPlayer = true; // [修改] 為玩家物件添加 isPlayer 標記
             this.state.enemies = enemyIds.map((id, index) => {
                 const template = JSON.parse(JSON.stringify(DATABASE.monsters[id]));
                 game.player.addCodexEntryForItem(id, 'monsters');
@@ -1072,6 +1079,7 @@ const game = {
             const defenderName = defender.isPlayer ? defender.name : defender.name;
             
             game.vfx.play('slash', document.getElementById(`unit-display-${defender.id || 'player'}`));
+            game.audio.playSFX('attack_hit'); // [新增] 攻擊命中音效
             
             if (isCrit) game.ui.showCombatLogMessage(`💥 暴擊！ ${attackerName} 對 ${defenderName} 造成了 ${damage} 點傷害。`, 'text-red-500 font-bold');
             else game.ui.showCombatLogMessage(`${attackerName} 對 ${defenderName} 造成了 ${damage} 點傷害。`, isMagical ? 'text-purple-400' : 'text-red-400');
@@ -1087,9 +1095,12 @@ const game = {
             game.state.player.activeEffects = []; // 清除戰鬥狀態
             game.player.recalculateStats();
 
+            game.audio.stopBGM(); // [新增] 停止戰鬥音樂
+
             if (fled) { setTimeout(() => game.ui.showScreen('hub-screen'), 1500); return;
             }
             if (win) {
+                game.audio.playSFX('win'); // [新增] 勝利音效
                 let totalExp = 0;
                 let loot = {};
                 
@@ -1130,6 +1141,7 @@ const game = {
                     buttons: [{ text: '繼續', fn: () => { game.ui.closeModal(); game.ui.showScreen('hub-screen'); } }]
                 });
             } else { 
+                game.audio.playSFX('lose'); // [新增] 失敗音效
                 game.ui.showModal({ 
                     title: '你被擊敗了...', 
                     body: '<p>你的冒險到此為止。</p>', 
@@ -1172,6 +1184,7 @@ const game = {
                 document.getElementById('game-container').classList.add('bg-hub');
                 document.getElementById('game-container').classList.remove('bg-combat');
                 this.renderHub(); 
+                game.audio.playBGM('hub'); // [新增] 播放主城音樂
             }
             if (screenId === 'shop-screen') { 
                 this.renderShop();
@@ -1179,6 +1192,10 @@ const game = {
             if (screenId === 'combat-screen') {
                 document.getElementById('game-container').classList.remove('bg-hub');
                 document.getElementById('game-container').classList.add('bg-combat');
+                game.audio.playBGM('combat'); // [新增] 播放戰鬥音樂
+            }
+            if(screenId === 'start-screen'){
+                game.audio.stopBGM(); // [新增] 停止所有音樂
             }
         },
         renderHub() {
@@ -1353,36 +1370,40 @@ const game = {
                 }}]
             });
         },
+        // [修改] GM 系統功能
         showGMPasswordModal() {
             this.showModal({
                 title: "GM 面板",
                 body: `<input id="gm-password-input" type="password" class="text-input w-full p-2 rounded" placeholder="請輸入密碼...">`,
                 buttons: [{ text: '確定', fn: () => {
                     if (document.getElementById('gm-password-input').value === '67712393') {
-                        this.closeModal(); this.showGMPanel();
-                    } else { this.closeModal(); }
+                        this.closeModal();
+                        this.applyGM(); // 直接執行 GM 功能
+                    } else {
+                        this.closeModal();
+                    }
                 }}]
             });
         },
-        showGMPanel() {
+        // [修改] GM 系統功能
+        applyGM() {
             const p = game.state.player;
-            this.showModal({
-                title: "GM 面板",
-                body: `
-                    <div class="grid grid-cols-2 gap-4">
-                        <button id="gm-add-points" class="menu-button p-2">屬性點 +10</button>
-                        <button id="gm-add-skill-points" class="menu-button p-2">技能點 +5</button>
-                        <button id="gm-add-exp" class="menu-button p-2">經驗值 +1000</button>
-                        <button id="gm-add-gold" class="menu-button p-2">金錢 +10000</button>
-                        <button id="gm-level-up" class="menu-button p-2 col-span-2">手動升級</button>
-                    </div>`,
-                buttons: [{ text: '關閉', fn: () => { this.updateHubUI(); this.closeModal(); }}]
-            });
-            document.getElementById('gm-add-points').addEventListener('click', () => { p.attributePoints += 10; this.showGMPanel(); });
-            document.getElementById('gm-add-skill-points').addEventListener('click', () => { p.skillPoints += 5; this.showGMPanel(); });
-            document.getElementById('gm-add-exp').addEventListener('click', () => { game.player.addExp(1000); this.updateHubUI(); });
-            document.getElementById('gm-add-gold').addEventListener('click', () => { p.gold += 10000; this.updateHubUI(); });
-            document.getElementById('gm-level-up').addEventListener('click', () => { game.player.levelUp(); this.showGMPanel(); });
+            if (!p) return;
+            const levelTarget = 50;
+            if (p.level >= levelTarget) {
+                this.showModal({ title: 'GM指令', body: '<p>你已經達到或超過50級。</p>', buttons: [{ text: '好的', fn: () => this.closeModal() }] });
+                return;
+            }
+            const levelsToGain = levelTarget - p.level;
+            for (let i = 0; i < levelsToGain; i++) {
+                // 調用現有的 levelUp 函數以確保所有獎勵都正確發放
+                game.player.levelUp();
+            }
+            // 確保最終等級是 50
+            p.level = levelTarget;
+            game.player.recalculateStats();
+            this.updateHubUI();
+            this.showModal({ title: 'GM指令', body: `<p>你已成功提升至 ${levelTarget} 級！</p>`, buttons: [{ text: '好的', fn: () => this.closeModal() }] });
         },
         renderCharSelect() {
             const container = document.getElementById('char-cards-container');
@@ -1802,6 +1823,62 @@ const game = {
                 }
             } catch(e) { console.error("Load failed:", e);
                 game.ui.showModal({ title: '<span class="text-red-500">讀取失敗</span>', body: '<p>無法讀取雲端資料。</p>', buttons: [{ text: '關閉', fn: () => game.ui.closeModal() }]});
+            }
+        }
+    },
+    
+    // [新增] 音效管理系統
+    audio: {
+        sounds: {},
+        currentBGM: null,
+        init() {
+            this.sounds = {
+                // 背景音樂 - 請將 '...' 替換為你的音檔路徑
+                hub: new Audio('.../hub_music.mp3'),
+                combat: new Audio('.../combat_music.mp3'),
+                
+                // 音效 - 請將 '...' 替換為你的音檔路徑
+                click: new Audio('.../click.mp3'),
+                attack_hit: new Audio('.../attack.mp3'),
+                level_up: new Audio('.../levelup.mp3'),
+                win: new Audio('.../win.mp3'),
+                lose: new Audio('.../lose.mp3'),
+            };
+            
+            // 設定 BGM
+            if (this.sounds.hub) { this.sounds.hub.loop = true; this.sounds.hub.volume = 0.3; }
+            if (this.sounds.combat) { this.sounds.combat.loop = true; this.sounds.combat.volume = 0.3; }
+            
+            // 設定 SFX
+            if (this.sounds.click) this.sounds.click.volume = 0.5;
+            if (this.sounds.attack_hit) this.sounds.attack_hit.volume = 0.7;
+            if (this.sounds.level_up) this.sounds.level_up.volume = 0.8;
+            if (this.sounds.win) this.sounds.win.volume = 0.7;
+            if (this.sounds.lose) this.sounds.lose.volume = 0.7;
+        },
+        playBGM(track) {
+            // 如果當前有 BGM 且不是要播放的曲目，則停止
+            if (this.currentBGM && this.currentBGM !== this.sounds[track]) {
+                this.currentBGM.pause();
+                this.currentBGM.currentTime = 0;
+            }
+            // 播放新的 BGM
+            if (this.sounds[track] && this.sounds[track].paused) {
+                this.sounds[track].play().catch(e => console.log("Audio play failed. User interaction might be required."));
+                this.currentBGM = this.sounds[track];
+            }
+        },
+        stopBGM() {
+            if (this.currentBGM) {
+                this.currentBGM.pause();
+                this.currentBGM.currentTime = 0;
+                this.currentBGM = null;
+            }
+        },
+        playSFX(sfx) {
+            if (this.sounds[sfx]) {
+                this.sounds[sfx].currentTime = 0;
+                this.sounds[sfx].play().catch(e => console.log("SFX play failed."));
             }
         }
     }
