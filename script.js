@@ -408,7 +408,7 @@ const game = {
             if(target.closest('#go-adventure-btn')) this.actions.adventure();
             if(target.closest('#rest-btn')) this.actions.rest();
             if(target.closest('#go-shop-btn')) this.actions.shop();
-            if(target.closest('#show-codex-btn')) this.actions.showCodexModal();
+            if(target.closest('#show-codex-btn')) this.ui.showCodexModal();
             if(target.closest('#save-btn')) this.saveLoad.save();
             if(target.closest('#load-btn')) this.saveLoad.showLoadConfirmationModal();
             if(target.closest('#return-to-start-btn')) this.ui.showReturnToStartConfirmation();
@@ -965,18 +965,17 @@ const game = {
         },
         toggleActionButtons(enabled) { document.querySelectorAll('#combat-action-area button').forEach(btn => btn.disabled = !enabled);
         },
+        // [修改] 讓此函式返回造成的傷害值
         executeAttack(attacker, defender, multiplier = 1.0, isSkill = false, isMagical = false) {
             const hitRate = 80 + (attacker.maxStats.hit * 1.5) - (defender.maxStats.eva * 1.0);
             const finalHitChance = Math.max(10, Math.min(95, hitRate));
 
             if (Math.random() * 100 > finalHitChance) {
                 game.ui.showCombatLogMessage(`${attacker.name} 的攻擊被 ${defender.name} 閃避了！`, 'text-gray-400');
-                return;
+                return 0; // [修改]
             }
             
             let damage;
-            let attackerName = attacker.isPlayer ? attacker.name : attacker.name;
-            let defenderName = defender.isPlayer ? defender.name : defender.name;
             
             // 混合職業普攻傷害調整
             if (!isSkill) {
@@ -996,7 +995,7 @@ const game = {
             }
             
             damage = Math.max(1, Math.round(damage * multiplier));
-            this.applyDamage(attacker, defender, damage, isMagical);
+            return this.applyDamage(attacker, defender, damage, isMagical); // [修改]
         },
         executeSkill(attacker, skillId, target) {
             const skillData = DATABASE.skills[skillId];
@@ -1021,9 +1020,10 @@ const game = {
             let targets = [];
             if (skillData.targetType === 'single') {
                 targets = target ? [target] : [];
-            // [修正] 範圍技能目標陣列使用淺拷貝 (Sec 1.5)
             } else if (skillData.targetType === 'all') {
                 targets = attacker.isPlayer ? [...this.state.enemies.filter(e => e.stats.hp > 0)] : [game.state.player];
+                // [修復] 增加一道額外的安全過濾，確保範圍技不會打到自己人
+                targets = targets.filter(t => t.isPlayer !== attacker.isPlayer);
             } else if (skillData.targetType === 'self') {
                 targets = [attacker];
             }
@@ -1031,10 +1031,27 @@ const game = {
             const isMagical = skillData.type.includes('magical');
             
             if (skillData.type.includes('physical') || skillData.type.includes('magical')) {
-                // [修正] 程式碼加固，確保 damageMultiplier 有預設值 (Sec 1.3)
                 const damageMultiplier = skillInfo.damageMultiplier ?? 1.0;
                 targets.forEach(t => {
                     this.executeAttack(attacker, t, damageMultiplier, true, isMagical);
+                });
+            } else if (skillData.type === 'magical_drain') { // [修復] 補全生命汲取技能邏輯
+                const damageMultiplier = skillInfo.damageMultiplier ?? 1.0;
+                const drainRatio = skillInfo.drainRatio ?? 0.5;
+                
+                targets.forEach(t => {
+                    const attackStat = attacker.maxStats.spi;
+                    const defenseStat = t.maxStats.spi;
+                    const baseDamage = Math.round(attackStat * (attackStat / (attackStat + defenseStat)));
+                    const skillDamage = Math.max(1, Math.round(baseDamage * damageMultiplier));
+                    const damageDealt = this.applyDamage(attacker, t, skillDamage, true);
+
+                    if (damageDealt > 0) {
+                        const healAmount = Math.round(damageDealt * drainRatio);
+                        attacker.stats.hp = Math.min(attacker.maxStats.hp, attacker.stats.hp + healAmount);
+                        game.ui.showCombatLogMessage(`${attackerName} 吸取了 ${t.name} ${healAmount} 點生命。`, 'text-green-400');
+                        game.vfx.play('heal', document.getElementById(`unit-display-${attacker.id || 'player'}`));
+                    }
                 });
             } else if (skillData.type === 'heal_attack') {
                 const healAmount = Math.round(attacker.maxStats.spi * (skillInfo.healRatio || 0.5));
@@ -1065,27 +1082,31 @@ const game = {
                 game.player.recalculateStats();
             }
         },
+        // [修改] 讓此函式返回造成的傷害值
         applyDamage(attacker, defender, damage, isMagical) {
-            // 防禦 NaN 污染
             if (isNaN(damage)) {
                 console.error("NaN damage detected. Attacker:", attacker, "Defender:", defender);
                 damage = 1;
             }
             const oldHp = defender.stats.hp;
             const isCrit = (attacker.maxStats.critRate || 0) > Math.random() * 100;
-            if (isCrit) damage = Math.round(damage * (attacker.maxStats.critDamage / 100));
+            if (isCrit) {
+                damage = Math.round(damage * (attacker.maxStats.critDamage / 100));
+            }
+
             defender.stats.hp = Math.max(0, defender.stats.hp - damage);
             const attackerName = attacker.isPlayer ? attacker.name : attacker.name;
             const defenderName = defender.isPlayer ? defender.name : defender.name;
             
             game.vfx.play('slash', document.getElementById(`unit-display-${defender.id || 'player'}`));
-            game.audio.playSFX('attack_hit'); // [新增] 攻擊命中音效
+            game.audio.playSFX('attack_hit');
             
             if (isCrit) game.ui.showCombatLogMessage(`💥 暴擊！ ${attackerName} 對 ${defenderName} 造成了 ${damage} 點傷害。`, 'text-red-500 font-bold');
             else game.ui.showCombatLogMessage(`${attackerName} 對 ${defenderName} 造成了 ${damage} 點傷害。`, isMagical ? 'text-purple-400' : 'text-red-400');
 
             game.ui.updateUnitHP(defender, oldHp);
             if (defender.stats.hp <= 0) game.ui.showCombatLogMessage(`${defenderName} 被擊敗了！`, 'text-gray-400');
+            return damage; // [修改]
         },
         end(win, fled = false) {
             this.state.actionInProgress = false;
@@ -1095,12 +1116,12 @@ const game = {
             game.state.player.activeEffects = []; // 清除戰鬥狀態
             game.player.recalculateStats();
 
-            game.audio.stopBGM(); // [新增] 停止戰鬥音樂
+            game.audio.stopBGM();
 
             if (fled) { setTimeout(() => game.ui.showScreen('hub-screen'), 1500); return;
             }
             if (win) {
-                game.audio.playSFX('win'); // [新增] 勝利音效
+                game.audio.playSFX('win');
                 let totalExp = 0;
                 let loot = {};
                 
@@ -1141,7 +1162,7 @@ const game = {
                     buttons: [{ text: '繼續', fn: () => { game.ui.closeModal(); game.ui.showScreen('hub-screen'); } }]
                 });
             } else { 
-                game.audio.playSFX('lose'); // [新增] 失敗音效
+                game.audio.playSFX('lose');
                 game.ui.showModal({ 
                     title: '你被擊敗了...', 
                     body: '<p>你的冒險到此為止。</p>', 
@@ -1184,7 +1205,7 @@ const game = {
                 document.getElementById('game-container').classList.add('bg-hub');
                 document.getElementById('game-container').classList.remove('bg-combat');
                 this.renderHub(); 
-                game.audio.playBGM('hub'); // [新增] 播放主城音樂
+                game.audio.playBGM('hub');
             }
             if (screenId === 'shop-screen') { 
                 this.renderShop();
@@ -1192,10 +1213,10 @@ const game = {
             if (screenId === 'combat-screen') {
                 document.getElementById('game-container').classList.remove('bg-hub');
                 document.getElementById('game-container').classList.add('bg-combat');
-                game.audio.playBGM('combat'); // [新增] 播放戰鬥音樂
+                game.audio.playBGM('combat');
             }
             if(screenId === 'start-screen'){
-                game.audio.stopBGM(); // [新增] 停止所有音樂
+                game.audio.stopBGM();
             }
         },
         renderHub() {
@@ -1280,7 +1301,6 @@ const game = {
                 });
             });
         },
-        // [修正] 重構 NPC 對話與任務處理邏輯 (Sec 4.1)
         showNPCDialogue(npcId) {
             const p = game.state.player;
             const npc = DATABASE.npcs[npcId];
@@ -1289,7 +1309,6 @@ const game = {
             let dialogueKey = 'default';
             let buttons = [];
 
-            // 1. 優先查找可提交的任務
             const completableQuestId = Object.keys(p.quests).find(id => 
                 DATABASE.quests[id].npc === npcId && p.quests[id].status === 'completed'
             );
@@ -1298,7 +1317,6 @@ const game = {
                 dialogueKey = 'questComplete';
                 buttons.push({ text: "這是我的榮幸", fn: () => { game.quests.giveReward(completableQuestId); } });
             } else {
-                // 2. 其次查找進行中的任務
                 const activeQuestId = Object.keys(p.quests).find(id => 
                     DATABASE.quests[id].npc === npcId && p.quests[id].status === 'active'
                 );
@@ -1306,7 +1324,6 @@ const game = {
                     dialogueKey = 'questInProgress';
                     buttons.push({ text: "我會盡快", fn: () => this.closeModal() });
                 } else {
-                    // 3. 最後查找可接取的任務
                     const nextQuestId = Object.keys(DATABASE.quests).find(id => 
                         DATABASE.quests[id].npc === npcId && !p.quests[id] && p.storyProgress === id
                     );
@@ -1370,7 +1387,6 @@ const game = {
                 }}]
             });
         },
-        // [修改] GM 系統功能
         showGMPasswordModal() {
             this.showModal({
                 title: "GM 面板",
@@ -1378,14 +1394,13 @@ const game = {
                 buttons: [{ text: '確定', fn: () => {
                     if (document.getElementById('gm-password-input').value === '67712393') {
                         this.closeModal();
-                        this.applyGM(); // 直接執行 GM 功能
+                        this.applyGM();
                     } else {
                         this.closeModal();
                     }
                 }}]
             });
         },
-        // [修改] GM 系統功能
         applyGM() {
             const p = game.state.player;
             if (!p) return;
@@ -1396,10 +1411,8 @@ const game = {
             }
             const levelsToGain = levelTarget - p.level;
             for (let i = 0; i < levelsToGain; i++) {
-                // 調用現有的 levelUp 函數以確保所有獎勵都正確發放
                 game.player.levelUp();
             }
-            // 確保最終等級是 50
             p.level = levelTarget;
             game.player.recalculateStats();
             this.updateHubUI();
@@ -1458,8 +1471,6 @@ const game = {
                 return `<span class="${color}">${index + 1}</span>`;
             }).join(' - ');
             
-            // [修正] 增加 Hit 和 Eva 顯示 (Sec 2.1)
-            // [修正] 使用本地化文本 (Sec 3.4)
             const questLog = document.getElementById('hub-quest-log');
             let questHTML = '';
             for (const questId in p.quests) {
@@ -1627,7 +1638,6 @@ const game = {
                         const itemId = p.equipment[slot];
                         if(itemId) {
                             const itemData = DATABASE.items[itemId];
-                            // [修正] 使用本地化文本 (Sec 3.4)
                             const statsHTML = itemData.stats ? `<p class="text-xs text-cyan-400">${Object.entries(itemData.stats).map(([s,v]) => `${LOCALIZATION_MAP.stats[s] || s.toUpperCase()}: ${v}`).join(', ')}</p>` : '';
                             itemsHTML += `<div class="flex justify-between items-center p-2 bg-green-900/30 rounded mb-2"><div><p class="font-bold text-green-400">[已裝備] ${itemData.name}</p>${statsHTML}</div><button data-action-type="unequip" data-slot="${slot}" class="menu-button px-4 py-1">拆除</button></div>`;
                         }
@@ -1745,14 +1755,25 @@ const game = {
             }
             render();
         },
+        // [修復] 冒險圖冊功能
         showCodexModal() {
             document.getElementById('codex-modal').classList.remove('hidden');
-            document.querySelector('.codex-tab-button[data-tab="monsters"]').click();
+            // 直接呼叫渲染函式，而不是模擬點擊，這樣更穩定
+            const defaultTab = document.querySelector('.codex-tab-button[data-tab="monsters"]');
+            document.querySelectorAll('.codex-tab-button').forEach(b => b.classList.remove('active'));
+            if(defaultTab) defaultTab.classList.add('active');
+            this.renderCodex('monsters');
         },
         renderCodex(tab) {
             const contentEl = document.getElementById('codex-content');
-            const allEntries = DATABASE.codex[tab];
+            const allEntries = DATABASE.codex[tab] || [];
             const knownEntries = game.state.codex[tab] || [];
+            
+            if (allEntries.length === 0) {
+                contentEl.innerHTML = `<p class="text-center text-gray-400">目前沒有任何記錄。</p>`;
+                return;
+            }
+
             const contentHTML = allEntries.map(id => {
                 const data = tab === 'monsters' ? DATABASE.monsters[id] : DATABASE.items[id];
                 const found = knownEntries.includes(id);
@@ -1760,7 +1781,8 @@ const game = {
                 const description = found ? (tab === 'monsters' ? `Lv.${data.level}` : data.description) : '尚未發現';
                 return `<div class="p-2 rounded-lg bg-black/20 border border-gray-600 ${!found ? 'grayscale opacity-50' : ''}"><h4 class="font-bold">${title}</h4><p class="text-xs text-gray-400">${description}</p></div>`;
             }).join('');
-            contentEl.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-2">${contentHTML}</div>` || `<p class="text-center text-gray-400">目前沒有任何記錄。</p>`;
+
+            contentEl.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-2">${contentHTML}</div>`;
         },
         closeCodexModal() {
             document.getElementById('codex-modal').classList.add('hidden');
@@ -1827,29 +1849,40 @@ const game = {
         }
     },
     
-    // [新增] 音效管理系統
+    // [修改] 音效管理系統
     audio: {
         sounds: {},
         currentBGM: null,
         init() {
+            const placeholderWarning = (name) => {
+                console.warn(`Audio source for '${name}' is not set. Sound will not play. Please provide a valid URL in game.audio.init().`);
+                return ''; // 返回空字串以避免錯誤
+            };
+
+            // ===== 請在這裡填寫你的音檔路徑 =====
+            const audioPaths = {
+                hub: 'REPLACE_WITH_URL_TO/hub_music.mp3',
+                combat: 'REPLACE_WITH_URL_TO/combat_music.mp3',
+                click: 'REPLACE_WITH_URL_TO/click.mp3',
+                attack_hit: 'REPLACE_WITH_URL_TO/attack.mp3',
+                level_up: 'REPLACE_WITH_URL_TO/levelup.mp3',
+                win: 'REPLACE_WITH_URL_TO/win.mp3',
+                lose: 'REPLACE_WITH_URL_TO/lose.mp3',
+            };
+            // ===================================
+            
             this.sounds = {
-                // 背景音樂 - 請將 '...' 替換為你的音檔路徑
-                hub: new Audio('.../hub_music.mp3'),
-                combat: new Audio('.../combat_music.mp3'),
-                
-                // 音效 - 請將 '...' 替換為你的音檔路徑
-                click: new Audio('.../click.mp3'),
-                attack_hit: new Audio('.../attack.mp3'),
-                level_up: new Audio('.../levelup.mp3'),
-                win: new Audio('.../win.mp3'),
-                lose: new Audio('.../lose.mp3'),
+                hub: new Audio(audioPaths.hub.startsWith('REPLACE') ? placeholderWarning('hub') : audioPaths.hub),
+                combat: new Audio(audioPaths.combat.startsWith('REPLACE') ? placeholderWarning('combat') : audioPaths.combat),
+                click: new Audio(audioPaths.click.startsWith('REPLACE') ? placeholderWarning('click') : audioPaths.click),
+                attack_hit: new Audio(audioPaths.attack_hit.startsWith('REPLACE') ? placeholderWarning('attack_hit') : audioPaths.attack_hit),
+                level_up: new Audio(audioPaths.level_up.startsWith('REPLACE') ? placeholderWarning('level_up') : audioPaths.level_up),
+                win: new Audio(audioPaths.win.startsWith('REPLACE') ? placeholderWarning('win') : audioPaths.win),
+                lose: new Audio(audioPaths.lose.startsWith('REPLACE') ? placeholderWarning('lose') : audioPaths.lose),
             };
             
-            // 設定 BGM
             if (this.sounds.hub) { this.sounds.hub.loop = true; this.sounds.hub.volume = 0.3; }
             if (this.sounds.combat) { this.sounds.combat.loop = true; this.sounds.combat.volume = 0.3; }
-            
-            // 設定 SFX
             if (this.sounds.click) this.sounds.click.volume = 0.5;
             if (this.sounds.attack_hit) this.sounds.attack_hit.volume = 0.7;
             if (this.sounds.level_up) this.sounds.level_up.volume = 0.8;
@@ -1857,15 +1890,16 @@ const game = {
             if (this.sounds.lose) this.sounds.lose.volume = 0.7;
         },
         playBGM(track) {
-            // 如果當前有 BGM 且不是要播放的曲目，則停止
-            if (this.currentBGM && this.currentBGM !== this.sounds[track]) {
+            const audio = this.sounds[track];
+            if (!audio || !audio.src) return; 
+
+            if (this.currentBGM && this.currentBGM !== audio) {
                 this.currentBGM.pause();
                 this.currentBGM.currentTime = 0;
             }
-            // 播放新的 BGM
-            if (this.sounds[track] && this.sounds[track].paused) {
-                this.sounds[track].play().catch(e => console.log("Audio play failed. User interaction might be required."));
-                this.currentBGM = this.sounds[track];
+            if (audio.paused) {
+                audio.play().catch(e => console.log("BGM play failed. User interaction might be required first."));
+                this.currentBGM = audio;
             }
         },
         stopBGM() {
@@ -1876,10 +1910,10 @@ const game = {
             }
         },
         playSFX(sfx) {
-            if (this.sounds[sfx]) {
-                this.sounds[sfx].currentTime = 0;
-                this.sounds[sfx].play().catch(e => console.log("SFX play failed."));
-            }
+            const audio = this.sounds[sfx];
+            if (!audio || !audio.src) return;
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log(`SFX '${sfx}' play failed.`));
         }
     }
 };
